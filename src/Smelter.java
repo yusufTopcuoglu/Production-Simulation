@@ -1,8 +1,10 @@
 
-class Smelter {
+class Smelter implements Runnable{
 
     private int id, waitInterval, storageCapacity, totalProducibleAmount;
     private IngotType ingotType;
+    private final Object storageLock = new Object();
+
 
     Smelter(int id, int waitInterval, int storageCapacity, int totalProducibleAmount, IngotType ingotType){
         this.id = id;
@@ -12,43 +14,21 @@ class Smelter {
         this.totalProducibleAmount = totalProducibleAmount;
     }
 
-    public int getWaitInterval() {
-        return waitInterval;
+
+    @Override
+    public void run() {
+
     }
 
-    public void setWaitInterval(int waitInterval) {
-        this.waitInterval = waitInterval;
+    public void putOreToStorage(){
+        synchronized (storageLock){
+            storageCapacity++;
+        }
     }
 
-    public int getStorageCapacity() {
-        return storageCapacity;
-    }
-
-    public void setStorageCapacity(int storageCapacity) {
-        this.storageCapacity = storageCapacity;
-    }
-
-    public int getTotalProducibleAmount() {
-        return totalProducibleAmount;
-    }
-
-    public void setTotalProducibleAmount(int totalProducibleAmount) {
-        this.totalProducibleAmount = totalProducibleAmount;
-    }
-
-    public IngotType getIngotType() {
-        return ingotType;
-    }
-
-    public void setIngotType(IngotType ingotType) {
-        this.ingotType = ingotType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void takeOreFromStorage(){
+        synchronized (storageLock){
+            storageCapacity--;
+        }
     }
 }

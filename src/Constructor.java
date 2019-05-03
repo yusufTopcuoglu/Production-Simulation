@@ -1,8 +1,9 @@
 
-public class Constructor {
+public class Constructor implements Runnable{
 
     private int id, waitInterval, storageCapacity;
     private IngotType ingotType;
+    private final Object storageLock = new Object();
 
 
     Constructor(int id, int waitInterval, int storageCapacity, IngotType ingotType) {
@@ -12,35 +13,21 @@ public class Constructor {
         this.ingotType = ingotType;
     }
 
-    public int getId() {
-        return id;
+    @Override
+    public void run() {
+
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void putOreToStorage(){
+        synchronized (storageLock){
+            storageCapacity++;
+        }
     }
 
-    public int getWaitInterval() {
-        return waitInterval;
+    public void takeOreFromStorage(){
+        synchronized (storageLock){
+            storageCapacity--;
+        }
     }
 
-    public void setWaitInterval(int waitInterval) {
-        this.waitInterval = waitInterval;
-    }
-
-    public int getStorageCapacity() {
-        return storageCapacity;
-    }
-
-    public void setStorageCapacity(int storageCapacity) {
-        this.storageCapacity = storageCapacity;
-    }
-
-    public IngotType getIngotType() {
-        return ingotType;
-    }
-
-    public void setIngotType(IngotType ingotType) {
-        this.ingotType = ingotType;
-    }
 }

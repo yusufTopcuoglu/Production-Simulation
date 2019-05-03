@@ -6,7 +6,6 @@ import java.util.Arrays;
 class SimulationController {
 
     private int argIndex;
-    private int numberOfTransporter, numberOfSmelter, numburOfConstructer;
     private ArrayList<String> args;
     private ArrayList<Smelter> smelters;
     private ArrayList<Transporter> transporters;
@@ -26,7 +25,6 @@ class SimulationController {
 
     }
 
-
     private void readAndInitialize(){
         readSmelters();
         readConstructors();
@@ -34,8 +32,8 @@ class SimulationController {
     }
 
     private void readSmelters(){
-        numberOfSmelter = getNextArg();
-        for (int j = 0 ; j < numberOfSmelter ; j++){
+        int numberOfSmelter = getNextArg();
+        for (int j = 0; j < numberOfSmelter; j++){
             int waitInterval = getNextArg();
             int storageCapacity = getNextArg();
             IngotType ingotType = intToIngotType(getNextArg());
@@ -46,8 +44,8 @@ class SimulationController {
     }
 
     private void readConstructors(){
-        numburOfConstructer = getNextArg();
-        for (int j = 0 ; j < numburOfConstructer ; j++){
+        int numberOfConstructor = getNextArg();
+        for (int j = 0; j < numberOfConstructor; j++){
             int waitInterval = getNextArg();
             int storageCapacity = getNextArg();
             IngotType ingotType = intToIngotType(getNextArg());
@@ -57,12 +55,12 @@ class SimulationController {
     }
 
     private void readTransporters(){
-        numberOfTransporter = getNextArg();
-        for (int j = 0 ; j < numberOfTransporter ; j++){
+        int numberOfTransporter = getNextArg();
+        for (int j = 0; j < numberOfTransporter; j++){
             int waitInterval = getNextArg();
             int targetSmelterId = getNextArg();
             int targetConstructerId = getNextArg();
-            Transporter transporter= new Transporter(j+1,waitInterval, targetSmelterId, targetConstructerId);
+            Transporter transporter= new Transporter(j+1,waitInterval, smelters.get(targetSmelterId-1), constructors.get(targetConstructerId-1));
             transporters.add(transporter);
         }
     }
