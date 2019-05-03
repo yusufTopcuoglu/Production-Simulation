@@ -17,9 +17,12 @@ public class Transporter implements Runnable {
 
     }
 
-
     private void print(Action action){
         HW2Logger.WriteOutput(0, id, 0,  action);
+    }
+
+    private void sleep(){
+        Utils.sleep(waitInterval);
     }
 
 }
