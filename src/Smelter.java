@@ -20,6 +20,10 @@ class Smelter implements Runnable{
 
     }
 
+    private void print(Action action){
+        HW2Logger.WriteOutput(id, 0, 0,  action);
+    }
+
     public void putOreToStorage(){
         synchronized (storageLock){
             storageCapacity++;

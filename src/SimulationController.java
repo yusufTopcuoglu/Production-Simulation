@@ -1,5 +1,3 @@
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,25 +8,62 @@ class SimulationController {
     private ArrayList<Smelter> smelters;
     private ArrayList<Transporter> transporters;
     private ArrayList<Constructor> constructors;
+    private ArrayList<Thread> threads;
 
     SimulationController(String[] args) {
         this.args =  new ArrayList<>(Arrays.asList(args));
         smelters = new ArrayList<>();
         transporters = new ArrayList<>();
         constructors = new ArrayList<>();
+        threads = new ArrayList<>();
         argIndex = 0;
         readAndInitialize();
-        System.out.println("sad");
     }
 
     void runAll(){
+        runSmelters();
+        runTransporters();
+        runConstructors();
+    }
 
+    void waitAll(){
+        for (Thread thread : threads ) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void readAndInitialize(){
         readSmelters();
         readConstructors();
         readTransporters();
+    }
+
+    private void runSmelters(){
+        for (Smelter smelter : smelters ) {
+            Thread thread = new Thread(smelter);
+            thread.start();
+            threads.add(thread);
+        }
+    }
+
+    private void runTransporters(){
+        for (Transporter transporter: transporters) {
+            Thread thread = new Thread(transporter);
+            thread.start();
+            threads.add(thread);
+        }
+    }
+
+    private void runConstructors(){
+        for (Constructor constructor: constructors) {
+            Thread thread = new Thread(constructor);
+            thread.start();
+            threads.add(thread);
+        }
     }
 
     private void readSmelters(){

@@ -7,9 +7,11 @@ public class Simulator {
 
         SimulationController simulationController = new SimulationController(args);
 
+        HW2Logger.InitWriteOutput();
+
         simulationController.runAll();
 
-        System.out.println(args.length);
+        simulationController.waitAll();
     }
 
 

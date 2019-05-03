@@ -30,4 +30,7 @@ public class Constructor implements Runnable{
         }
     }
 
+    private void print(Action action){
+        HW2Logger.WriteOutput(0, 0, id,  action);
+    }
 }
