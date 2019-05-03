@@ -1,22 +1,20 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Scanner;
 
 class SimulationController {
 
-    private int argIndex;
-    private ArrayList<String> args;
     private ArrayList<Smelter> smelters;
     private ArrayList<Transporter> transporters;
     private ArrayList<Constructor> constructors;
     private ArrayList<Thread> threads;
+    private Scanner scanner ;
 
-    SimulationController(String[] args) {
-        this.args =  new ArrayList<>(Arrays.asList(args));
+    SimulationController() {
         smelters = new ArrayList<>();
         transporters = new ArrayList<>();
         constructors = new ArrayList<>();
         threads = new ArrayList<>();
-        argIndex = 0;
+        scanner = new Scanner(System.in);
         readAndInitialize();
     }
 
@@ -40,6 +38,7 @@ class SimulationController {
         readSmelters();
         readConstructors();
         readTransporters();
+        scanner.close();
     }
 
     private void runSmelters(){
@@ -94,14 +93,14 @@ class SimulationController {
         for (int j = 0; j < numberOfTransporter; j++){
             int waitInterval = getNextArg();
             int targetSmelterId = getNextArg();
-            int targetConstructerId = getNextArg();
-            Transporter transporter= new Transporter(j+1,waitInterval, smelters.get(targetSmelterId-1), constructors.get(targetConstructerId-1));
+            int targetConstructorId = getNextArg();
+            Transporter transporter= new Transporter(j+1, waitInterval, smelters.get(targetSmelterId-1), constructors.get(targetConstructorId-1));
             transporters.add(transporter);
         }
     }
 
     private int getNextArg(){
-        return Integer.parseInt(args.get(argIndex++));
+        return scanner.nextInt();
     }
 
     private IngotType intToIngotType(int ingotTypeInt){
