@@ -24,24 +24,24 @@ public class Transporter implements Runnable {
 
     private void transporterSmelterRoutine(){
         synchronized (targetSmelter.getStorageLock()){
-            targetSmelter.acquireStorageSemaphoreFull();
+            targetSmelter.waitUntilOrePresentInStorage();
             printWithSmelter(Action.TRANSPORTER_TRAVEL);
             sleep();
             printWithSmelter(Action.TRANSPORTER_TAKE_INGOT);
             sleep();
-            targetSmelter.releaseStorageSemaphoreEmpty();
+            targetSmelter.takeOreFromStorage();
         }
     }
 
     private void transporterConstructorRoutine(){
         synchronized (targetConstructor.getStorageLock()){
             if(targetConstructor.isAlive()){
-                targetConstructor.acquireStorageSpaceSemaphoreEmpty();
+                targetConstructor.waitUntilEmptySpaceAvailable();
                 printWithConstructor(Action.TRANSPORTER_TRAVEL);
                 sleep();
                 printWithConstructor(Action.TRANSPORTER_DROP_INGOT);
                 sleep();
-                targetConstructor.releaseStorageSpaceSemaphoreFull();
+                targetConstructor.dropOreToStorage();
             }
         }
     }

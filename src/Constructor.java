@@ -59,7 +59,7 @@ public class Constructor implements Runnable{
         }
     }
 
-    void acquireStorageSpaceSemaphoreEmpty(){
+    void waitUntilEmptySpaceAvailable(){
         try {
             storageSpaceSemaphoreEmpty.acquire();
         } catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public class Constructor implements Runnable{
         }
     }
 
-    void releaseStorageSpaceSemaphoreFull(){
+    void dropOreToStorage(){
         storageSpaceSemaphoreFull.release();
     }
 

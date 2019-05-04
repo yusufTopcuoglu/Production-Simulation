@@ -63,7 +63,7 @@ class Smelter implements Runnable{
         }
     }
 
-    void acquireStorageSemaphoreFull(){
+    void waitUntilOrePresentInStorage(){
         try {
             storageSpaceSemaphoreFull.acquire();
         } catch (InterruptedException e) {
@@ -76,7 +76,7 @@ class Smelter implements Runnable{
         storageSpaceSemaphoreFull.release();
     }
 
-    void releaseStorageSemaphoreEmpty(){
+    void takeOreFromStorage(){
         storageSpaceSemaphoreEmpty.release();
     }
 
