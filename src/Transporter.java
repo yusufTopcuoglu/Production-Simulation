@@ -21,14 +21,15 @@ public class Transporter implements Runnable {
 
 
         }
+        print(Action.TRANSPORTER_STOPPED);
     }
 
     private void transporterSmelterRoutine(){
         synchronized (targetSmelter.getStorageLock()){
             targetSmelter.acquireStorageSemaphoreFull();
-            print(Action.TRANSPORTER_TRAVEL);
+            printWithSmelter(Action.TRANSPORTER_TRAVEL);
             sleep();
-            print(Action.TRANSPORTER_TAKE_INGOT);
+            printWithSmelter(Action.TRANSPORTER_TAKE_INGOT);
             sleep();
             targetSmelter.releaseStorageSemaphoreEmpty();
         }
@@ -40,6 +41,14 @@ public class Transporter implements Runnable {
 
     private void print(Action action){
         HW2Logger.WriteOutput(0, id, 0,  action);
+    }
+
+    private void printWithSmelter(Action action){
+        HW2Logger.WriteOutput(targetSmelter.getId(), id, 0,  action);
+    }
+
+    private void printWithConstructor(Action action){
+        HW2Logger.WriteOutput(0, id, targetConstructor.getId(),  action);
     }
 
     private void sleep(){

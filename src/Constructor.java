@@ -1,33 +1,60 @@
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class Constructor implements Runnable{
 
-    private int id, waitInterval, storageCapacity;
-    private IngotType ingotType;
+    private int id, waitInterval, neededIngotCountForOneProduction;
+
     private final Object storageLock = new Object();
+
+    /**
+     * Empty and Full semaphore for Producer-Consumer problem.
+     * This constructor is the consumer in this scenario.
+     */
+    private Semaphore storageSpaceSemaphoreEmpty;
+    private Semaphore storageSpaceSemaphoreFull;
+
+    private boolean alive;
+
+    private final Object aliveLock = new Object();
 
 
     Constructor(int id, int waitInterval, int storageCapacity, IngotType ingotType) {
         this.id = id;
         this.waitInterval = waitInterval;
-        this.storageCapacity = storageCapacity;
-        this.ingotType = ingotType;
+        if (ingotType == IngotType.IRON)
+            neededIngotCountForOneProduction = 2;
+        else
+            neededIngotCountForOneProduction = 3;
+        storageSpaceSemaphoreEmpty = new Semaphore(storageCapacity);
+        storageSpaceSemaphoreFull = new Semaphore(0);
+        alive = true;
     }
 
     @Override
     public void run() {
-
+        print(Action.CONSTRUCTOR_CREATED);
+        while (waitIngots()) {
+            print(Action.CONSTRUCTOR_STARTED);
+            sleep();
+            constructorProduced();
+            print(Action.CONSTRUCTOR_FINISHED);
+        }
+        kill();
+        print(Action.CONSTRUCTOR_STOPPED);
     }
 
-    public void putOreToStorage(){
-        synchronized (storageLock){
-            storageCapacity++;
+    private boolean waitIngots(){
+        try {
+            return storageSpaceSemaphoreFull.tryAcquire(neededIngotCountForOneProduction, 3, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public void takeOreFromStorage(){
-        synchronized (storageLock){
-            storageCapacity--;
-        }
+    private void constructorProduced(){
+        storageSpaceSemaphoreEmpty.release();
     }
 
     private void print(Action action){
@@ -36,5 +63,25 @@ public class Constructor implements Runnable{
 
     private void sleep(){
         Utils.sleep(waitInterval);
+    }
+
+    boolean isAlive(){
+        synchronized (aliveLock){
+            return alive;
+        }
+    }
+
+    private void kill(){
+        synchronized (aliveLock){
+            alive = false;
+        }
+    }
+
+    int getId() {
+        return id;
+    }
+
+    Object getStorageLock() {
+        return storageLock;
     }
 }

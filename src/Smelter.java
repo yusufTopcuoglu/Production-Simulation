@@ -96,7 +96,11 @@ class Smelter implements Runnable{
         Utils.sleep(waitInterval);
     }
 
-    public Object getStorageLock() {
+    Object getStorageLock() {
         return storageLock;
+    }
+
+    int getId() {
+        return id;
     }
 }
