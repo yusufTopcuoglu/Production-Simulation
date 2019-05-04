@@ -54,7 +54,21 @@ public class Constructor implements Runnable{
     }
 
     private void constructorProduced(){
-        storageSpaceSemaphoreEmpty.release();
+        for (int i = 0; i < neededIngotCountForOneProduction; i++){
+            storageSpaceSemaphoreEmpty.release();
+        }
+    }
+
+    void acquireStorageSpaceSemaphoreEmpty(){
+        try {
+            storageSpaceSemaphoreEmpty.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void releaseStorageSpaceSemaphoreFull(){
+        storageSpaceSemaphoreFull.release();
     }
 
     private void print(Action action){

@@ -15,11 +15,9 @@ public class Transporter implements Runnable {
     @Override
     public void run() {
         print(Action.TRANSPORTER_CREATED);
-        while (targetSmelter.willProduce()){
+        while (targetSmelter.willProduce() && targetConstructor.isAlive()){
             transporterSmelterRoutine();
-
-
-
+            transporterConstructorRoutine();
         }
         print(Action.TRANSPORTER_STOPPED);
     }
@@ -35,8 +33,17 @@ public class Transporter implements Runnable {
         }
     }
 
-    private void transporterConstructerRoutine(){
-
+    private void transporterConstructorRoutine(){
+        synchronized (targetConstructor.getStorageLock()){
+            if(targetConstructor.isAlive()){
+                targetConstructor.acquireStorageSpaceSemaphoreEmpty();
+                printWithConstructor(Action.TRANSPORTER_TRAVEL);
+                sleep();
+                printWithConstructor(Action.TRANSPORTER_DROP_INGOT);
+                sleep();
+                targetConstructor.releaseStorageSpaceSemaphoreFull();
+            }
+        }
     }
 
     private void print(Action action){
