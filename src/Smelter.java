@@ -28,6 +28,8 @@ class Smelter implements Runnable{
      */
     private Semaphore willProduceSemaphore;
 
+    private final Object storageLock = new Object();
+
 
     Smelter(int id, int waitInterval, int storageCapacity, int totalProducibleAmount, IngotType ingotType){
         this.id = id;
@@ -61,12 +63,20 @@ class Smelter implements Runnable{
         }
     }
 
+    void acquireStorageSemaphoreFull(){
+        try {
+            storageSpaceSemaphoreFull.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void ingotProduced(){
         storageSpaceSemaphoreFull.release();
     }
 
-    public void takeOreFromStorage(){
+    void releaseStorageSemaphoreEmpty(){
         storageSpaceSemaphoreEmpty.release();
     }
 
@@ -74,7 +84,7 @@ class Smelter implements Runnable{
         return canProduceSemaphore.tryAcquire();
     }
 
-    public boolean willProduce(){
+    boolean willProduce(){
         return willProduceSemaphore.tryAcquire();
     }
 
@@ -84,5 +94,9 @@ class Smelter implements Runnable{
 
     private void sleep(){
         Utils.sleep(waitInterval);
+    }
+
+    public Object getStorageLock() {
+        return storageLock;
     }
 }

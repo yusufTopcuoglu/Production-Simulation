@@ -14,6 +14,27 @@ public class Transporter implements Runnable {
 
     @Override
     public void run() {
+        print(Action.TRANSPORTER_CREATED);
+        while (targetSmelter.willProduce()){
+            transporterSmelterRoutine();
+
+
+
+        }
+    }
+
+    private void transporterSmelterRoutine(){
+        synchronized (targetSmelter.getStorageLock()){
+            targetSmelter.acquireStorageSemaphoreFull();
+            print(Action.TRANSPORTER_TRAVEL);
+            sleep();
+            print(Action.TRANSPORTER_TAKE_INGOT);
+            sleep();
+            targetSmelter.releaseStorageSemaphoreEmpty();
+        }
+    }
+
+    private void transporterConstructerRoutine(){
 
     }
 
