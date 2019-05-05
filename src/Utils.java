@@ -6,7 +6,7 @@ class Utils {
 
     private Utils(){}
 
-    public static void sleep(int waitInterval){
+    static void sleep(int waitInterval){
         Random random = new Random(System.currentTimeMillis());
         DoubleStream stream;
         stream = random.doubles(1, waitInterval-waitInterval*0.01, waitInterval+waitInterval*0.02);

@@ -13,18 +13,18 @@
  */
 
 
-public class HW2Logger {
+class HW2Logger {
     private static long startTime;
     
     private static long getTimeDifference() {
         return System.nanoTime()-startTime;
     }
 
-    public static void InitWriteOutput() {
+    static void InitWriteOutput() {
         startTime = System.nanoTime();
     }
 
-    public static synchronized void WriteOutput(int smelterID, int transporterID, int constructorID, Action action) {
+    static synchronized void WriteOutput(int smelterID, int transporterID, int constructorID, Action action) {
         long currentThreadID = Thread.currentThread().getId();
         long timestamp = getTimeDifference();
         

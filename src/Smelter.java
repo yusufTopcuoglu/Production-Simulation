@@ -3,7 +3,6 @@ import java.util.concurrent.Semaphore;
 class Smelter implements Runnable{
 
     private int id, waitInterval;
-    private IngotType ingotType;
 
     /**
      * Empty and Full semaphore for Producer-Consumer problem.
@@ -31,9 +30,8 @@ class Smelter implements Runnable{
     private final Object storageLock = new Object();
 
 
-    Smelter(int id, int waitInterval, int storageCapacity, int totalProducibleAmount, IngotType ingotType){
+    Smelter(int id, int waitInterval, int storageCapacity, int totalProducibleAmount){
         this.id = id;
-        this.ingotType = ingotType;
         this.waitInterval = waitInterval;
         storageSpaceSemaphoreEmpty = new Semaphore(storageCapacity);
         canProduceSemaphore = new Semaphore(totalProducibleAmount);

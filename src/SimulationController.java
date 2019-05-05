@@ -70,9 +70,9 @@ class SimulationController {
         for (int j = 0; j < numberOfSmelter; j++){
             int waitInterval = getNextArg();
             int storageCapacity = getNextArg();
-            IngotType ingotType = intToIngotType(getNextArg());
+            getNextArg();
             int totalProducibleAmount = getNextArg();
-            Smelter smelter = new Smelter(j+1, waitInterval, storageCapacity, totalProducibleAmount, ingotType);
+            Smelter smelter = new Smelter(j+1, waitInterval, storageCapacity, totalProducibleAmount);
             smelters.add(smelter);
         }
     }
